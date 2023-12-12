@@ -15,6 +15,17 @@ LiquidCrystal_I2C lcd(0x27, 20, 4); // LCD-Adresse 0x27, 20 Zeichen, 4 Zeilen
 
 char daysOfTheWeek[7][12] = {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
 
+byte customChar[] = {
+  B00000,
+  B00000,
+  B01010,
+  B00000,
+  B10001,
+  B01110,
+  B00000,
+  B00000
+};
+
 bool cnt = 0;
 
 void datetime_serialT(){
@@ -75,8 +86,14 @@ void setup() {
   // LCD setup:
   lcd.init();
   lcd.backlight();
+  
   lcd.setCursor(0,0);
+  lcd.print("....................");
+  lcd.setCursor(4,2);
   lcd.print("Guten Tag :)");
+  lcd.setCursor(0,3);
+  lcd.print("....................");
+
   delay(3000);
 
   pinMode(button, INPUT_PULLUP);
@@ -99,7 +116,8 @@ void loop() {
     digitalWrite(led, LOW);           // LED ausschalten.
     if (cnt == 1){
       lcd.clear();
-      lcd.print("Einen schönen Tag noch :)");
+      lcd.setCursor(4,2);
+      lcd.print("Wiedersehen ...");
       cnt = 0;
       delay(1500);
     }else {
