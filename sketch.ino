@@ -48,8 +48,6 @@ void loop() {
   Serial.println();
 
 
-  Serial.println();
-  delay(3000);
   // LCD display:
   lcd.setCursor(0,0);
   lcd.print("Aktuelle Uhrzeit: ");
@@ -73,5 +71,6 @@ void loop() {
   lcd.print("Wochentag: ");
   lcd.print(daysOfTheWeek[now.dayOfTheWeek()]);
 
+  delay(1000);
    
 }
