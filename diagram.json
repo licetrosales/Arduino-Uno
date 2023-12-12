@@ -24,8 +24,8 @@
     {
       "type": "wokwi-slide-switch",
       "id": "sw1",
-      "top": -104,
-      "left": -95.5,
+      "top": -103.8,
+      "left": -99.7,
       "rotate": 270,
       "attrs": {}
     },
