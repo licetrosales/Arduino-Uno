@@ -5,41 +5,26 @@ Erstellt: 13.12.2023
 // Bibliotheken
 #include <LiquidCrystal_I2C.h>
 #include <RTClib.h>
-#define schalter 8
+#define button 8
 #define led 7
+#define led_s 2
+
 // Erstell rtc and lcd Object:
 RTC_DS1307 rtc;
 LiquidCrystal_I2C lcd(0x27, 20, 4); // LCD-Adresse 0x27, 20 Zeichen, 4 Zeilen
+
 char daysOfTheWeek[7][12] = {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
 
-bool zustand = 0;
+bool cnt = 0;
 
-void setup() {
-  Serial.begin(115200);
-  if (! rtc.begin()) {
-    Serial.println("Couldn't find RTC");
-    Serial.flush();
-    abort();
-  }
-
-  // LCD setup:
-  lcd.init();
-  lcd.backlight();
-
-
-  pinMode(schalter, INPUT_PULLUP);
-  pinMode(led, OUTPUT);
-}
-
-void loop() {
-  // Date Time
+void datetime_serialT(){
   DateTime now =rtc.now();
-  digitalWrite(led, HIGH);
-  Serial.print("Current time: ");
+  
+  Serial.print("Aktuelle Uhrzeit: ");
   Serial.print(now.year(), DEC);
-  Serial.print('/');
+  Serial.print('.');
   Serial.print(now.month(), DEC);
-  Serial.print('/');
+  Serial.print('.');
   Serial.print(now.day(), DEC);
   Serial.print(" (");
   Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
@@ -50,7 +35,10 @@ void loop() {
   Serial.print(':');
   Serial.print(now.second(), DEC);
   Serial.println();
+}
 
+void datetime_lcd(){
+  DateTime now =rtc.now();
 
   // LCD display:
   lcd.setCursor(0,0);
@@ -64,21 +52,61 @@ void loop() {
   lcd.print(now.second(), DEC);
 
   lcd.setCursor(0,2);
-   lcd.print("Datum: ");
+  lcd.print("Datum: ");
   lcd.print(now.year(), DEC);
   lcd.print('.');
   lcd.print(now.month(), DEC);
   lcd.print('.');
   lcd.print(now.day(), DEC);
-
   
-  
-
   lcd.setCursor(0,3);
   lcd.print("Wochentag: ");
   lcd.print(daysOfTheWeek[now.dayOfTheWeek()]);
-  digitalWrite(led, LOW);
-  delay(1000);
-  
+}
+
+void setup() {
+  Serial.begin(9600);
+  if (! rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    Serial.flush();
+    abort();
+  }
+
+  // LCD setup:
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0,0);
+  lcd.print("Guten Tag :)");
+  delay(3000);
+
+  pinMode(button, INPUT_PULLUP);
+  pinMode(led, OUTPUT);
+  pinMode(led_s, OUTPUT);
+}
+
+
+void loop() {
+
+  if (digitalRead(button) == HIGH) {  // Wenn auf der Eingangsleitung des Tasters HIGH anliegt ...
+    digitalWrite(led, HIGH);          // LED anschalten,
+    digitalWrite(led_s, HIGH);
+    datetime_lcd();
+    datetime_serialT();
+    cnt = 1;
+    digitalWrite(led_s, LOW);
+    delay(1000);
+  } else {                                // sonst ...
+    digitalWrite(led, LOW);           // LED ausschalten.
+    if (cnt == 1){
+      lcd.clear();
+      lcd.print("Einen schönen Tag noch :)");
+      cnt = 0;
+      delay(1500);
+    }else {
+      lcd.clear();
+    }
+    
+  }
+   
    
 }
