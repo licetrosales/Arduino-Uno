@@ -20,14 +20,20 @@
       "rotate": 90,
       "attrs": { "value": "220" }
     },
-    { "type": "wokwi-led", "id": "led1", "top": -186, "left": 51.8, "attrs": { "color": "blue" } },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -186,
+      "left": 51.8,
+      "attrs": { "color": "blue", "flip": "1" }
+    },
     {
       "type": "wokwi-slide-switch",
       "id": "sw1",
       "top": -103.8,
       "left": -99.7,
       "rotate": 270,
-      "attrs": {}
+      "attrs": { "value": "On" }
     },
     {
       "type": "wokwi-led",
