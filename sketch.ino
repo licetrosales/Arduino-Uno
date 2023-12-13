@@ -1,4 +1,5 @@
 /* Programmcode: Echtzeituhr-Arduino-Projekt  
+Beschreibung: Visualisierung von Datum und Uhrzeit mit einer RTC DS1307, die über I2C angeschlossen ist
 Autor: Licet Ullmann
 Erstellt: 13.12.2023
 */
@@ -50,15 +51,13 @@ void datetime_lcd(){
   lcd.print('.');
   lcd.print(now.day(), DEC); // Tag ausgeben
 
-  lcd.setCursor(6,2);
+  lcd.setCursor(6,1);
   lcd.print(now.hour(), DEC); // Stunde ausgeben
   lcd.print(':');
   lcd.print(now.minute(), DEC); // Minute ausgeben
   lcd.print(':');
   lcd.print(now.second(), DEC); // Sekunde ausgeben
  
-  
-  
   lcd.setCursor(0,3);
   lcd.print("Wochentag: ");
   lcd.print(daysOfTheWeek[now.dayOfTheWeek()]); // Wochentag ausgeben
@@ -94,7 +93,7 @@ void setup() {
 void loop() {
 
   if (digitalRead(button) == HIGH) {  // Wenn auf der Eingangsleitung des Tasters HIGH anliegt ...
-    digitalWrite(led, HIGH);          // LED einschalten,
+    digitalWrite(led, HIGH);          // RTC,LCD, LEDs einschalten,
     digitalWrite(led_s, HIGH);
     datetime_lcd();
     datetime_serialT();
@@ -102,7 +101,7 @@ void loop() {
     digitalWrite(led_s, LOW);
     delay(1000); // Eine Sekunde warten, bevor die Schleife erneut durchlaufen wird
   } else {                                // sonst ...
-    digitalWrite(led, LOW);           // LED ausschalten.
+    digitalWrite(led, LOW);           // RTC,LCD, LEDs ausschalten.
     if (cnt == 1){
       lcd.clear();
       lcd.setCursor(4,2);
